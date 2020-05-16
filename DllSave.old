@@ -1,0 +1,235 @@
+///////////////////////
+//
+//
+//  On MS Windows
+
+//  -------------
+
+//  cl /c /D_WINDOWS DllSave.cpp
+
+//  link /out:libMonoWindows.dll /DLL /DEF:libMonoWindows.def DllSave.obj
+//
+
+//  On GNU/Linux
+
+//  ------------
+
+//
+
+//  g++ -c fPIC DllSave.cpp
+
+//  g++ -shared -o libMonoLinux.so DllSave.o 
+
+//
+
+//  On MAC OS X
+
+//  ------------
+
+//  g++ -c -fPIC DllSave.cpp
+
+//  g++ -dynamiclib -o libMonoMac.so DllSave.o
+
+//
+
+//
+
+// 
+
+
+
+#include <stdio.h>
+
+#include <math.h>
+
+#include <stdio.h>
+
+#include <string.h>
+
+
+
+#ifdef _WINDOWS
+
+#define EXPORT_FUNC __declspec(dllexport)
+#define CALL_CONV   __stdcall
+
+#else
+
+#define EXPORT_FUNC 
+#define CALL_CONV   
+
+#endif
+
+
+
+//
+//
+//
+//
+//
+//
+//
+
+//
+//
+//
+//
+//
+
+extern "C" EXPORT_FUNC int CALL_CONV Add(int a, int b ) 
+
+{
+
+   return a + b; 
+
+}
+
+
+
+/////////////
+//
+//
+//
+//
+
+
+extern "C" EXPORT_FUNC double CALL_CONV Average( double  *arr , int n , 
+double *average , double *var  , double *std )
+
+{
+
+    if ( arr == 0 || n <= 0 ) {
+
+ 
+          *average = 0;
+
+           *var=  0;
+
+           *std = 0;
+ 
+          return -1;
+
+    }
+ 
+   double *parr = arr;
+
+   double sum = 0.0;
+ 
+   for(int j=0; j<n;++j )
+
+    {
+       
+        sum += *parr++;
+
+    }
+
+
+   
+   double ave = sum/n;
+
+
+   sum = 0.0;
+ 
+   parr = arr;
+ 
+   for(int j=0; j<n;++j )
+    {
+
+       sum += ( *parr - ave)*(*parr-ave);
+
+       parr++;
+
+    }
+
+
+    *average = ave;
+ 
+   *var = sum/n;
+ 
+   *std = sqrt(sum/n);
+ 
+   return 1;  
+ 
+
+
+
+}
+
+
+////////
+//
+//
+//
+//
+//
+
+extern "C" EXPORT_FUNC void CALL_CONV ListOfSquares( 
+long (CALL_CONV *square_callback) (int rs) )
+
+{
+
+
+     for(int i=0; i<200; ++i ) 
+     {
+
+         (*square_callback)(i);
+  
+  }
+
+
+}
+
+
+
+////////////////////
+//
+//
+//
+//
+//
+
+extern "C" EXPORT_FUNC bool CALL_CONV StringCopy( char *t , const char *src )
+{
+ 
+   if ( t == 0 || src == 0 )
+
+         return false;
+
+
+    if (*src == 0 )
+
+        return false;
+
+ 
+    strcpy(t,src);
+
+
+     return true;
+
+}
+
+
+
+
+// data structure for the callback function
+
+struct EventData
+{
+    int I;
+    char * Message;
+};
+
+
+
+extern "C" EXPORT_FUNC  bool CALL_CONV PutEventData( EventData *ptr )
+{
+
+   
+   printf("%s\n",ptr->Message);
+   
+      printf("%d\n",ptr->I);
+      return false;  
+
+ 
+
+}

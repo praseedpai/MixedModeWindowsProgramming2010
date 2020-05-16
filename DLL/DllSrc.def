@@ -1,0 +1,13 @@
+;DLLSrc.def
+;
+;--- A DEF file to avoid 
+;--- Windows name mangling....
+;
+;Written by Praseed Pai K.T.
+;           http://praseedp.blogspot.com
+;    
+;
+
+LIBRARY DllSrc
+EXPORTS
+         Add 

@@ -1,0 +1,9 @@
+;----------- A module definition file
+;------------for Windows DLL
+LIBRARY libMonoWindows
+
+EXPORTS
+        Add
+        ListOfSquares
+        StringCopy
+        PutEventData
